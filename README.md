@@ -94,7 +94,7 @@ The Playwright config uses `webServer.reuseExistingServer: true`, so if the serv
 - [x] Fixtures: JSON test data for accounts and transactions – see [tests-playwright/fixtures/](tests-playwright/fixtures/).
 - [x] API (Node.js + Express): REST endpoints `GET /api/accounts`, `GET /api/accounts/:id/transactions`, `POST /api/transfer` – see [tests-playwright/server.js](tests-playwright/server.js).
 - [x] API tests: Playwright `request` fixture tests for all API endpoints – see [tests-playwright/src/tests/api.spec.ts](tests-playwright/src/tests/api.spec.ts).
-- [ ] CI: GitHub Actions workflow to run Playwright tests (and optionally REST Assured).
-- [ ] Test analysis: write manual test cases (login, accounts overview, transfer, filters, error cases).
-- [ ] Unit tests: validation logic for amounts (0, negative, non-numeric).
+- [x] CI: GitHub Actions workflow to run Playwright tests – see [.github/workflows/playwright.yml](.github/workflows/playwright.yml).
+- [x] Test analysis: manual test cases documented with automation status – see [tests-playwright/TEST-ANALYSIS.md](tests-playwright/TEST-ANALYSIS.md).
+- [x] Unit tests: validation logic for amounts (0, negative, non-numeric, Infinity) – see [tests-playwright/src/tests/validation.spec.ts](tests-playwright/src/tests/validation.spec.ts).
 
