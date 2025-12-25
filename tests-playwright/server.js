@@ -4,10 +4,103 @@ const path = require('path');
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Load fixture data
 const accounts = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'accounts.json'), 'utf8'));
 const transactions = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'transactions.json'), 'utf8'));
+
+// REST API Endpoints
+app.get('/api/accounts', (req, res) => {
+  res.json({
+    success: true,
+    data: accounts
+  });
+});
+
+app.get('/api/accounts/:id/transactions', (req, res) => {
+  const accountId = req.params.id;
+  const account = accounts.find(acc => acc.id === accountId);
+  
+  if (!account) {
+    return res.status(404).json({
+      success: false,
+      error: 'Account not found'
+    });
+  }
+  
+  const accountTransactions = transactions.filter(tx => tx.accountId === accountId);
+  res.json({
+    success: true,
+    data: {
+      account: account,
+      transactions: accountTransactions
+    }
+  });
+});
+
+app.post('/api/transfer', (req, res) => {
+  const { fromAccountId, toAccountId, amount, description } = req.body;
+  
+  // Validation - check for presence first (allowing 0 to pass to next check)
+  if (!fromAccountId || !toAccountId || amount === undefined || amount === null) {
+    return res.status(400).json({
+      success: false,
+      error: 'Missing required fields: fromAccountId, toAccountId, amount'
+    });
+  }
+  
+  const parsedAmount = parseFloat(amount);
+  if (isNaN(parsedAmount) || parsedAmount <= 0) {
+    return res.status(400).json({
+      success: false,
+      error: 'Amount must be a positive number'
+    });
+  }
+  
+  const fromAccount = accounts.find(acc => acc.id === fromAccountId);
+  const toAccount = accounts.find(acc => acc.id === toAccountId);
+  
+  if (!fromAccount) {
+    return res.status(404).json({
+      success: false,
+      error: 'Source account not found'
+    });
+  }
+  
+  if (!toAccount) {
+    return res.status(404).json({
+      success: false,
+      error: 'Destination account not found'
+    });
+  }
+  
+  if (fromAccount.balance < parsedAmount) {
+    return res.status(400).json({
+      success: false,
+      error: 'Insufficient funds'
+    });
+  }
+  
+  // Simulate transfer (in-memory only, not persisted)
+  const transferId = 'tx-' + Date.now();
+  const transfer = {
+    id: transferId,
+    fromAccountId,
+    toAccountId,
+    amount: parsedAmount,
+    description: description || 'Transfer',
+    timestamp: new Date().toISOString(),
+    status: 'completed'
+  };
+  
+  res.json({
+    success: true,
+    data: transfer
+  });
+});
+
+// HTML UI Routes
 
 app.get('/login', (req, res) => {
   res.send(`
