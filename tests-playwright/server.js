@@ -71,6 +71,107 @@ app.get('/transfer', (req, res) => {
   `);
 });
 
+const accountData = {
+  id: 'ACC-001',
+  name: 'Primary Checking',
+  balance: 1250.5,
+  currency: 'USD',
+  transactions: [
+    { id: 'tx-001', date: '2024-10-01', type: 'Credit', amount: 500, description: 'Salary' },
+    { id: 'tx-002', date: '2024-10-03', type: 'Debit', amount: 120.25, description: 'Groceries' },
+    { id: 'tx-003', date: '2024-10-06', type: 'Debit', amount: 60, description: 'Gas' },
+    { id: 'tx-004', date: '2024-10-08', type: 'Credit', amount: 200, description: 'Refund' },
+  ],
+};
+
+app.get(['/account/:id', '/account'], (req, res) => {
+  const data = accountData;
+  res.send(`
+    <!doctype html>
+    <html>
+      <head>
+        <meta charset="utf-8" />
+        <title>Account Detail</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 24px; }
+          .balance { margin: 8px 0 16px; font-size: 1.1rem; }
+          .filters { display: flex; gap: 12px; align-items: flex-end; margin-bottom: 16px; }
+          .filters label { display: flex; flex-direction: column; font-size: 0.9rem; }
+          table { border-collapse: collapse; width: 100%; }
+          th, td { border: 1px solid #ddd; padding: 8px; }
+          th { background: #f5f5f5; text-align: left; }
+        </style>
+      </head>
+      <body>
+        <h1 class="account-name">${data.name}</h1>
+        <div class="balance">Account: ${data.id} | Balance: ${data.balance.toFixed(2)} ${data.currency}</div>
+
+        <div class="filters">
+          <label>Type
+            <select id="typeFilter">
+              <option value="All">All</option>
+              <option value="Credit">Credit</option>
+              <option value="Debit">Debit</option>
+            </select>
+          </label>
+          <label>Min amount
+            <input id="minAmount" type="number" step="0.01" />
+          </label>
+          <label>Max amount
+            <input id="maxAmount" type="number" step="0.01" />
+          </label>
+          <button id="applyFilters">Apply filters</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody id="transactionsBody"></tbody>
+        </table>
+
+        <script>
+          const data = ${JSON.stringify(accountData)};
+          const tbody = document.getElementById('transactionsBody');
+
+          function render(rows) {
+            tbody.innerHTML = rows.map(tx => (
+              '<tr data-type="' + tx.type + '" data-amount="' + tx.amount + '" data-id="' + tx.id + '">' +
+                '<td>' + tx.date + '</td>' +
+                '<td>' + tx.type + '</td>' +
+                '<td>' + tx.amount.toFixed(2) + '</td>' +
+                '<td class="tx-desc">' + tx.description + '</td>' +
+              '</tr>'
+            )).join('');
+          }
+
+          function applyFilters() {
+            const type = document.getElementById('typeFilter').value;
+            const min = parseFloat(document.getElementById('minAmount').value);
+            const max = parseFloat(document.getElementById('maxAmount').value);
+
+            const filtered = data.transactions.filter(tx => {
+              if (type !== 'All' && tx.type !== type) return false;
+              if (!Number.isNaN(min) && tx.amount < min) return false;
+              if (!Number.isNaN(max) && tx.amount > max) return false;
+              return true;
+            });
+            render(filtered);
+          }
+
+          document.getElementById('applyFilters').addEventListener('click', applyFilters);
+          render(data.transactions);
+        </script>
+      </body>
+    </html>
+  `);
+});
+
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`Test app listening on http://localhost:${port}`);

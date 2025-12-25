@@ -2,20 +2,21 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 // Start the server as a child process
-const serverProcess = spawn('node', ['server.js'], {
+const serverProcess = spawn(process.execPath, [path.join(__dirname, 'server.js')], {
   cwd: __dirname,
-  stdio: 'inherit',
-  shell: true
+  stdio: 'inherit'
 });
 
 // Handle termination signals
 function cleanup() {
   console.log('Stopping server...');
-  serverProcess.kill('SIGTERM');
+  try {
+    serverProcess.kill('SIGTERM');
+  } catch (_) {}
   
   // Force kill after 2 seconds if not stopped
   setTimeout(() => {
-    serverProcess.kill('SIGKILL');
+    try { serverProcess.kill('SIGKILL'); } catch (_) {}
     process.exit(0);
   }, 2000);
 }

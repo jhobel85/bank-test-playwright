@@ -80,3 +80,19 @@ The Playwright config uses `webServer.reuseExistingServer: true`, so if the serv
    npx playwright show-report
    ```
 
+## - Project Planning and Progress Summary
+
+- [x] Local Express server with login, dashboard, transfer pages – see [tests-playwright/server.js](tests-playwright/server.js).
+- [x] Playwright + TypeScript project structure (tests, page objects, fixtures, config) – see [tests-playwright](tests-playwright).
+- [x] Page Objects: [LoginPage.ts](tests-playwright/src/page-objects/LoginPage.ts), [DashboardPage.ts](tests-playwright/src/page-objects/DashboardPage.ts), [TransferPage.ts](tests-playwright/src/page-objects/TransferPage.ts) (+ JS equivalents).
+- [x] E2E tests for login, dashboard, transfer – see [tests-playwright/src/tests](tests-playwright/src/tests).
+- [x] Playwright config to auto-start the server during tests – see [tests-playwright/playwright.config.ts](tests-playwright/playwright.config.ts).
+- [ ] UI: Account detail page (AccountDetailPage) and transaction history with filtering.
+- [ ] Tests: `accounts.spec.ts`, `transactions.spec.ts` plus page objects (AccountDetailPage).
+- [ ] Fixtures: JSON test data for accounts, transactions, and edge cases.
+- [ ] API (Node.js + Express option): add REST endpoints `GET /accounts`, `GET /accounts/{id}/transactions`, `POST /transfer`.
+- [ ] API tests: Playwright `request` fixture or separate REST Assured project (Java/Kotlin).
+- [ ] CI: GitHub Actions workflow to run Playwright tests (and optionally REST Assured).
+- [ ] Test analysis: write manual test cases (login, accounts overview, transfer, filters, error cases).
+- [ ] Unit tests: validation logic for amounts (0, negative, non-numeric).
+
