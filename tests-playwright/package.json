@@ -1,0 +1,20 @@
+{
+  "name": "bank-test-playwright",
+  "version": "1.0.0",
+  "description": "Playwright TypeScript project for bank testing.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "test": "npx playwright test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
+
