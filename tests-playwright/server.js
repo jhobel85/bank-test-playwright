@@ -1,7 +1,13 @@
 const express = require('express');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
+
+// Load fixture data
+const accounts = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'accounts.json'), 'utf8'));
+const transactions = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'transactions.json'), 'utf8'));
 
 app.get('/login', (req, res) => {
   res.send(`
@@ -71,21 +77,11 @@ app.get('/transfer', (req, res) => {
   `);
 });
 
-const accountData = {
-  id: 'ACC-001',
-  name: 'Primary Checking',
-  balance: 1250.5,
-  currency: 'USD',
-  transactions: [
-    { id: 'tx-001', date: '2024-10-01', type: 'Credit', amount: 500, description: 'Salary' },
-    { id: 'tx-002', date: '2024-10-03', type: 'Debit', amount: 120.25, description: 'Groceries' },
-    { id: 'tx-003', date: '2024-10-06', type: 'Debit', amount: 60, description: 'Gas' },
-    { id: 'tx-004', date: '2024-10-08', type: 'Credit', amount: 200, description: 'Refund' },
-  ],
-};
-
 app.get(['/account/:id', '/account'], (req, res) => {
-  const data = accountData;
+  const accountId = req.params.id || 'ACC-001';
+  const account = accounts.find(acc => acc.id === accountId) || accounts[0];
+  const accountTransactions = transactions.filter(tx => tx.accountId === accountId);
+  
   res.send(`
     <!doctype html>
     <html>
@@ -103,8 +99,8 @@ app.get(['/account/:id', '/account'], (req, res) => {
         </style>
       </head>
       <body>
-        <h1 class="account-name">${data.name}</h1>
-        <div class="balance">Account: ${data.id} | Balance: ${data.balance.toFixed(2)} ${data.currency}</div>
+        <h1 class="account-name">${account.name}</h1>
+        <div class="balance">Account: ${account.id} | Balance: ${account.balance.toFixed(2)} ${account.currency}</div>
 
         <div class="filters">
           <label>Type
@@ -136,7 +132,13 @@ app.get(['/account/:id', '/account'], (req, res) => {
         </table>
 
         <script>
-          const data = ${JSON.stringify(accountData)};
+          const data = {
+            id: '${account.id}',
+            name: '${account.name}',
+            balance: ${account.balance},
+            currency: '${account.currency}',
+            transactions: ${JSON.stringify(accountTransactions)}
+          };
           const tbody = document.getElementById('transactionsBody');
 
           function render(rows) {

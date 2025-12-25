@@ -87,10 +87,12 @@ The Playwright config uses `webServer.reuseExistingServer: true`, so if the serv
 - [x] Page Objects: [LoginPage.ts](tests-playwright/src/page-objects/LoginPage.ts), [DashboardPage.ts](tests-playwright/src/page-objects/DashboardPage.ts), [TransferPage.ts](tests-playwright/src/page-objects/TransferPage.ts) (+ JS equivalents).
 - [x] E2E tests for login, dashboard, transfer – see [tests-playwright/src/tests](tests-playwright/src/tests).
 - [x] Playwright config to auto-start the server during tests – see [tests-playwright/playwright.config.ts](tests-playwright/playwright.config.ts).
-- [ ] UI: Account detail page (AccountDetailPage) and transaction history with filtering.
-- [ ] Tests: `accounts.spec.ts`, `transactions.spec.ts` plus page objects (AccountDetailPage).
-- [ ] Fixtures: JSON test data for accounts, transactions, and edge cases.
-- [ ] API (Node.js + Express option): add REST endpoints `GET /accounts`, `GET /accounts/{id}/transactions`, `POST /transfer`.
+- [x] UI: Account detail page with transaction history and client-side filtering – see [tests-playwright/server.js](tests-playwright/server.js) (`/account` route).
+- [x] Page Object: [AccountDetailPage.ts](tests-playwright/src/page-objects/AccountDetailPage.ts) for account detail interactions.
+- [x] Test: [accounts.spec.ts](tests-playwright/src/tests/accounts.spec.ts) covering transaction filtering by type and amount.
+- [x] Test: [transactions.spec.ts](tests-playwright/src/tests/transactions.spec.ts) with edge cases (empty results, min/max filters, type filters).
+- [x] Fixtures: JSON test data for accounts and transactions – see [tests-playwright/fixtures/](tests-playwright/fixtures/).
+- [ ] API (Node.js + Express option): add REST endpoints `GET /accounts`, `GET /accounts/{id}/transactions`, `POST /transfer` (current routes are HTML pages, not JSON APIs).
 - [ ] API tests: Playwright `request` fixture or separate REST Assured project (Java/Kotlin).
 - [ ] CI: GitHub Actions workflow to run Playwright tests (and optionally REST Assured).
 - [ ] Test analysis: write manual test cases (login, accounts overview, transfer, filters, error cases).

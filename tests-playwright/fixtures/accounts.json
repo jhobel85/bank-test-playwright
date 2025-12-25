@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ACC-001",
+    "name": "Primary Checking",
+    "balance": 1250.50,
+    "currency": "USD",
+    "type": "checking"
+  },
+  {
+    "id": "ACC-002",
+    "name": "Savings Account",
+    "balance": 5000.00,
+    "currency": "USD",
+    "type": "savings"
+  },
+  {
+    "id": "ACC-003",
+    "name": "Business Account",
+    "balance": -150.75,
+    "currency": "USD",
+    "type": "checking"
+  }
+]

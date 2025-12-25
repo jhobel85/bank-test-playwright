@@ -1,0 +1,58 @@
+[
+  {
+    "id": "tx-001",
+    "accountId": "ACC-001",
+    "date": "2024-10-01",
+    "type": "Credit",
+    "amount": 500.00,
+    "description": "Salary"
+  },
+  {
+    "id": "tx-002",
+    "accountId": "ACC-001",
+    "date": "2024-10-03",
+    "type": "Debit",
+    "amount": 120.25,
+    "description": "Groceries"
+  },
+  {
+    "id": "tx-003",
+    "accountId": "ACC-001",
+    "date": "2024-10-06",
+    "type": "Debit",
+    "amount": 60.00,
+    "description": "Gas"
+  },
+  {
+    "id": "tx-004",
+    "accountId": "ACC-001",
+    "date": "2024-10-08",
+    "type": "Credit",
+    "amount": 200.00,
+    "description": "Refund"
+  },
+  {
+    "id": "tx-005",
+    "accountId": "ACC-002",
+    "date": "2024-10-05",
+    "type": "Credit",
+    "amount": 1000.00,
+    "description": "Deposit"
+  },
+  {
+    "id": "tx-006",
+    "accountId": "ACC-002",
+    "date": "2024-10-10",
+    "type": "Debit",
+    "amount": 50.00,
+    "description": "ATM Withdrawal"
+  },
+  {
+    "id": "tx-007",
+    "accountId": "ACC-003",
+    "date": "2024-10-07",
+    "type": "Debit",
+    "amount": 200.75,
+    "description": "Office Supplies"
+  }
+]
