@@ -6,10 +6,11 @@ export default defineConfig({
   retries: 2,
   reporter: 'html',
   webServer: {
-    command: 'npm run dev',
+    command: 'node start-server.js',
     port: 3000,
-    // Toggle via env var; defaults to false to avoid stale servers.
-    reuseExistingServer: process.env.REUSE_EXISTING_SERVER === 'FALSE',
+    cwd: '.',
+    // Always start a fresh server and stop it after tests finish
+    reuseExistingServer: true,
     timeout: 120 * 1000,
   },
   use: {

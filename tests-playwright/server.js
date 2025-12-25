@@ -72,6 +72,44 @@ app.get('/transfer', (req, res) => {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Test app listening on http://localhost:${port}`);
 });
+
+// Disable keep-alive to ensure connections close properly
+server.keepAliveTimeout = 0;
+
+// Track all connections
+const connections = new Set();
+
+server.on('connection', (conn) => {
+  connections.add(conn);
+  conn.on('close', () => {
+    connections.delete(conn);
+  });
+});
+
+// Graceful shutdown handling
+function shutdown(signal) {
+  console.log(`${signal} received, closing server...`);
+  
+  // Close server to stop accepting new connections
+  server.close(() => {
+    console.log('Server closed');
+    process.exit(0);
+  });
+  
+  // Force close all existing connections
+  for (const conn of connections) {
+    conn.destroy();
+  }
+  
+  // Force exit after 5 seconds if server hasn't closed
+  setTimeout(() => {
+    console.log('Forcing shutdown...');
+    process.exit(1);
+  }, 5000);
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
